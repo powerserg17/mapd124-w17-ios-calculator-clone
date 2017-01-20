@@ -302,6 +302,7 @@
 				F2481C171E2EE77500CD9834 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
