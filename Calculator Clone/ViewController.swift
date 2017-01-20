@@ -56,6 +56,7 @@ class ViewController: UIViewController {
                 } else {
                     display.text?.append(sender.currentTitle!)
                 }
+                currNumber = Double(display.text!)!
             
             case "C":
                 display.text="0"
@@ -91,6 +92,8 @@ class ViewController: UIViewController {
                 display.text = String(operationPressed(operation: .multiply))
             case "÷":
                 display.text = String(operationPressed(operation: .divide))
+            case "=":
+                display.text = String(operationPressed(operation: .result))
             
             default: break
         }
@@ -124,6 +127,8 @@ class ViewController: UIViewController {
                 return prevNumber*currNumber
             case .divide:
                 return prevNumber/currNumber
+            case .result:
+                return prevNumber
             default: return 0
         }
     }
