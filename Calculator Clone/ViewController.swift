@@ -27,7 +27,7 @@ class ViewController: UIViewController {
     
     var firstCharacter: Bool = true
     var prevNumber: Double = 0
-    var currNumber: Double = 1
+    var currNumber: Double = 0
     var currOperation: operation? = nil
     var dotted: Bool = false
     
@@ -62,12 +62,20 @@ class ViewController: UIViewController {
                 firstCharacter = true
                 currNumber = 0
                 clearBtn.setTitle("AC", for: .normal)
+                dotted = false
             case "AC":
                 display.text="0"
                 firstCharacter = true
                 currNumber = 0
                 prevNumber = 0
                 currOperation = nil
+                dotted = false
+            case ".":
+                if !dotted {
+                    display.text?.append(".")
+                    firstCharacter = false
+                }
+                dotted = true
             case "±":
                 if currNumber<0 {
                     display.text?.remove(at: (display.text?.startIndex)!)
@@ -75,9 +83,48 @@ class ViewController: UIViewController {
                     display.text?.insert("-", at: (display.text?.startIndex)!)
                 }
                 currNumber = currNumber * (-1)
-            
+            case "+":
+                display.text = String(operationPressed(operation: .plus))
+            case "-":
+                display.text = String(operationPressed(operation: .minus))
+            case "×":
+                display.text = String(operationPressed(operation: .multiply))
+            case "÷":
+                display.text = String(operationPressed(operation: .divide))
             
             default: break
+        }
+    }
+    
+    func operationPressed(operation:operation)->Double {
+        if currOperation == nil {
+            currOperation = operation
+            prevNumber = currNumber
+            currNumber = 0
+            dotted = false
+            firstCharacter = true
+        } else {
+            prevNumber = performOperation()
+            currOperation = operation
+            currNumber = 0
+            dotted = false
+            dotted = false
+            firstCharacter = true
+        }
+        return prevNumber
+    }
+    
+    func performOperation()->Double {
+        switch currOperation! {
+            case .plus:
+                return prevNumber+currNumber
+            case .minus:
+                return prevNumber-currNumber
+            case .multiply:
+                return prevNumber*currNumber
+            case .divide:
+                return prevNumber/currNumber
+            default: return 0
         }
     }
 
