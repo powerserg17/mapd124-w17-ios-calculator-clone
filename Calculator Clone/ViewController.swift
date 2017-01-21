@@ -19,9 +19,6 @@ class ViewController: UIViewController {
         case multiply
         case divide
         case percent
-        case point
-        case revert
-        case clear
         case result
     }
     
@@ -80,27 +77,39 @@ class ViewController: UIViewController {
             case "±":
                 if currNumber<0 {
                     display.text?.remove(at: (display.text?.startIndex)!)
+                    currNumber = currNumber * (-1)
                 } else if currNumber>0 {
                     display.text?.insert("-", at: (display.text?.startIndex)!)
+                    currNumber = currNumber * (-1)
+                } else if currNumber == 0 {
+                    if prevNumber<0 {
+                        display.text?.remove(at: (display.text?.startIndex)!)
+                    } else if prevNumber>0 {
+                        display.text?.insert("-", at: (display.text?.startIndex)!)
+                    }
+                    currNumber = prevNumber * (-1)
+                    print(currNumber)
                 }
-                currNumber = currNumber * (-1)
             case "+":
-                display.text = String(operationPressed(operation: .plus))
+                display.text = String(operationPressed(operation: .plus).clean)
             case "-":
-                display.text = String(operationPressed(operation: .minus))
+                display.text = String(operationPressed(operation: .minus).clean)
             case "×":
-                display.text = String(operationPressed(operation: .multiply))
+                display.text = String(operationPressed(operation: .multiply).clean)
             case "÷":
-                display.text = String(operationPressed(operation: .divide))
+                display.text = String(operationPressed(operation: .divide).clean)
+            case "%":
+                currNumber = prevNumber * 0.01 * currNumber
+                display.text = String(currNumber.clean)
             case "=":
-                display.text = String(operationPressed(operation: .result))
+                display.text = String(operationPressed(operation: .result).clean)
             
             default: break
         }
     }
     
     func operationPressed(operation:operation)->Double {
-        if currOperation == nil {
+        if currOperation == nil || currOperation == .result {
             currOperation = operation
             prevNumber = currNumber
             currNumber = 0
@@ -110,7 +119,6 @@ class ViewController: UIViewController {
             prevNumber = performOperation()
             currOperation = operation
             currNumber = 0
-            dotted = false
             dotted = false
             firstCharacter = true
         }
@@ -133,5 +141,11 @@ class ViewController: UIViewController {
         }
     }
 
+}
+
+extension Double {
+    var clean: String {
+        return self.truncatingRemainder(dividingBy: 1) == 0 ? String(format: "%.0f", self) : String(self)
+    }
 }
 
