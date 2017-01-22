@@ -2,6 +2,10 @@
 //  AppDelegate.swift
 //  Calculator Clone
 //
+//  Copy of iOS native calculator with the same interface and functions.
+//  Landscape functionality is not implemented
+//  Design is adaptive for different screens
+//
 //  Created by Serhii Pianykh on 2017-01-17.
 //  Copyright © 2017 Serhii Pianykh. All rights reserved.
 //

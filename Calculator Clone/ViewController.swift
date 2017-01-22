@@ -2,6 +2,10 @@
 //  ViewController.swift
 //  Calculator Clone
 //
+//  Copy of iOS native calculator with the same interface and functions.
+//  Landscape functionality is not implemented
+//  Design is adaptive for different screens
+//
 //  Created by Serhii Pianykh on 2017-01-17.
 //  Copyright © 2017 Serhii Pianykh. All rights reserved.
 //
@@ -99,7 +103,12 @@ class ViewController: UIViewController {
             case "÷":
                 display.text = String(operationPressed(operation: .divide).clean)
             case "%":
-                currNumber = prevNumber * 0.01 * currNumber
+                if currNumber != 0 {
+                    currNumber = prevNumber * 0.01 * currNumber
+                } else {
+                    currNumber = prevNumber * 0.01
+                }
+                
                 display.text = String(currNumber.clean)
             case "=":
                 display.text = String(operationPressed(operation: .result).clean)
