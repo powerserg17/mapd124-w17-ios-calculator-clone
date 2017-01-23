@@ -17,6 +17,7 @@ class ViewController: UIViewController {
     @IBOutlet var display: UILabel!
     @IBOutlet var clearBtn: UIButton!
     
+    //enumerate with operations list
     enum operation {
         case plus
         case minus
@@ -25,11 +26,15 @@ class ViewController: UIViewController {
         case percent
         case result
     }
-    
+    //bool to know if it's a new entry
     var firstCharacter: Bool = true
+    //first number of action, also hold subtotal results for previous operations
     var prevNumber: Double = 0
+    //currently number being entered
     var currNumber: Double = 0
+    //last posted operation
     var currOperation: operation? = nil
+    //bool to know if the . was entered
     var dotted: Bool = false
     
     
@@ -48,23 +53,29 @@ class ViewController: UIViewController {
         
         print(sender.currentTitle!)
         
+        //depending on which button pressed
         switch sender.currentTitle! {
+            //numbers
             case "0"..."9":
+                //if new number - display on title and change All Clear to Clear
                 if firstCharacter == true {
                     display.text = sender.currentTitle!
                     firstCharacter = false
                     clearBtn.setTitle("C", for: .normal)
-                } else {
+                } else { //otherwise - just append to existings decimals
                     display.text?.append(sender.currentTitle!)
                 }
                 currNumber = Double(display.text!)!
             
+            //clear current number
             case "C":
                 display.text="0"
                 firstCharacter = true
                 currNumber = 0
                 clearBtn.setTitle("AC", for: .normal)
                 dotted = false
+            
+            //clear all
             case "AC":
                 display.text="0"
                 firstCharacter = true
@@ -72,12 +83,16 @@ class ViewController: UIViewController {
                 prevNumber = 0
                 currOperation = nil
                 dotted = false
+            
+            //add fractial part to number
             case ".":
                 if !dotted {
                     display.text?.append(".")
                     firstCharacter = false
                 }
                 dotted = true
+            
+            //change current number's sign
             case "±":
                 if currNumber<0 {
                     display.text?.remove(at: (display.text?.startIndex)!)
@@ -94,6 +109,8 @@ class ViewController: UIViewController {
                     currNumber = prevNumber * (-1)
                     print(currNumber)
                 }
+            
+            //perform standart operations + - * /
             case "+":
                 display.text = String(operationPressed(operation: .plus).clean)
             case "-":
@@ -102,14 +119,19 @@ class ViewController: UIViewController {
                 display.text = String(operationPressed(operation: .multiply).clean)
             case "÷":
                 display.text = String(operationPressed(operation: .divide).clean)
+            
+            //percent operation
+            //if we apply percent for current number
             case "%":
                 if currNumber != 0 {
                     currNumber = prevNumber * 0.01 * currNumber
-                } else {
+                } else { //or if we do it for existing subtotal/total result
                     currNumber = prevNumber * 0.01
                 }
                 
                 display.text = String(currNumber.clean)
+            
+            //get a result
             case "=":
                 display.text = String(operationPressed(operation: .result).clean)
             
@@ -117,6 +139,7 @@ class ViewController: UIViewController {
         }
     }
     
+    //function takes pressed operation and if it's first operation - remembers it, if not - perfoming previous operation and remembers current
     func operationPressed(operation:operation)->Double {
         if currOperation == nil || currOperation == .result {
             currOperation = operation
@@ -134,6 +157,7 @@ class ViewController: UIViewController {
         return prevNumber
     }
     
+    //function performs main operations with two numbers
     func performOperation()->Double {
         switch currOperation! {
             case .plus:
@@ -152,6 +176,7 @@ class ViewController: UIViewController {
 
 }
 
+//extension for type Double, allows to remove fractial part of Double value if it's don't have any (integer)
 extension Double {
     var clean: String {
         return self.truncatingRemainder(dividingBy: 1) == 0 ? String(format: "%.0f", self) : String(self)
