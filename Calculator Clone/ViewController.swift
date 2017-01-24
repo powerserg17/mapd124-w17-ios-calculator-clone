@@ -86,7 +86,10 @@ class ViewController: UIViewController {
             
             //add fractial part to number
             case ".":
-                if !dotted {
+                if firstCharacter {
+                    display.text = "0."
+                    firstCharacter = false
+                } else if !dotted {
                     display.text?.append(".")
                     firstCharacter = false
                 }
@@ -106,8 +109,7 @@ class ViewController: UIViewController {
                     } else if prevNumber>0 {
                         display.text?.insert("-", at: (display.text?.startIndex)!)
                     }
-                    currNumber = prevNumber * (-1)
-                    print(currNumber)
+                    prevNumber = prevNumber * (-1)
                 }
             
             //perform standart operations + - * /
@@ -123,10 +125,13 @@ class ViewController: UIViewController {
             //percent operation
             //if we apply percent for current number
             case "%":
-                if currNumber != 0 {
+                if currNumber != 0 && prevNumber != 0 {
                     currNumber = prevNumber * 0.01 * currNumber
+                } else if prevNumber == 0 {
+                    currNumber = currNumber * 0.01
                 } else { //or if we do it for existing subtotal/total result
                     currNumber = prevNumber * 0.01
+                    currOperation = nil
                 }
                 
                 display.text = String(currNumber.clean)
@@ -141,12 +146,18 @@ class ViewController: UIViewController {
     
     //function takes pressed operation and if it's first operation - remembers it, if not - perfoming previous operation and remembers current
     func operationPressed(operation:operation)->Double {
-        if currOperation == nil || currOperation == .result {
+        if currOperation == nil {
             currOperation = operation
             prevNumber = currNumber
             currNumber = 0
             dotted = false
             firstCharacter = true
+        } else if currOperation == .result {
+            currOperation = operation
+            currNumber = 0
+            dotted = false
+            firstCharacter = true
+
         } else {
             prevNumber = performOperation()
             currOperation = operation
