@@ -139,6 +139,7 @@ class ViewController: UIViewController {
             //get a result
             case "=":
                 display.text = String(operationPressed(operation: .result).clean)
+                clearBtn.setTitle("AC", for: .normal)
             
             default: break
         }
@@ -157,7 +158,6 @@ class ViewController: UIViewController {
             currNumber = 0
             dotted = false
             firstCharacter = true
-
         } else {
             prevNumber = performOperation()
             currOperation = operation
@@ -179,8 +179,6 @@ class ViewController: UIViewController {
                 return prevNumber*currNumber
             case .divide:
                 return prevNumber/currNumber
-            case .result:
-                return prevNumber
             default: return 0
         }
     }
