@@ -1,6 +1,7 @@
 //
 //  ViewController.swift
 //  Calculator Clone
+//  Serhii Pianykh 300907406
 //
 //  Copy of iOS native calculator with the same interface and functions.
 //  Landscape functionality is not implemented
