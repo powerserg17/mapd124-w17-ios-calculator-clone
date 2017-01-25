@@ -23,7 +23,6 @@ class ViewController: UIViewController {
         case minus
         case multiply
         case divide
-        case percent
         case result
     }
     //bool to know if it's a new entry
